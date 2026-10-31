@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="RainSense — Premium Weather Intelligence Dashboard. Smarter Forecasts. Safer Tomorrows. Real-time weather, 7-day forecasts, rain predictions, and ML-powered analysis." />
+  <meta name="theme-color" content="#0a0e17" />
+  <title>RainSense — Weather Intelligence Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header" role="banner">
+    <div class="container header-inner">
+      <div class="header-left">
+        <!-- Brand -->
+        <a href="#" class="brand" aria-label="RainSense Home">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+          </div>
+          <span class="brand-name">RainSense</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="desktop-nav" role="navigation" aria-label="Main navigation">
+          <a href="#" class="nav-link active" data-page="forecast">Forecast</a>
+          <a href="#" class="nav-link" data-page="ml-lab">ML Prediction Lab</a>
+          <a href="#" class="nav-link" data-page="saved">Saved Locations</a>
+          <a href="#" class="nav-link" data-page="about">About</a>
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <!-- Current Location Badge -->
+        <div class="header-location" aria-live="polite">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="header-location-name">Jaipur</span>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- ========== FORECAST PAGE ========== -->
+      <section class="page-section active" id="page-forecast" aria-label="Weather Forecast">
+
+        <!-- Search Section -->
+        <div class="search-section">
+          <div class="search-bar">
+            <div class="search-input-wrapper">
+              <div class="search-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </div>
+              <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Search city, region, or country..."
+                value="Jaipur, Rajasthan, India"
+                autocomplete="off"
+                aria-label="Search location"
+                role="combobox"
+                aria-expanded="false"
+                aria-controls="search-suggestions"
+              />
+              <button class="search-btn ripple" id="search-btn" aria-label="Search">Search</button>
+              <!-- Suggestions Dropdown -->
+              <div class="search-suggestions" id="search-suggestions" role="listbox"></div>
+            </div>
+            <button class="locate-btn" id="locate-btn" aria-label="Use my current location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="8" stroke-dasharray="2 2"/></svg>
+              Use My Location
+            </button>
+          </div>
+        </div>
+
+        <!-- Weather Content Wrapper (for loading state) -->
+        <div style="position:relative;">
+          <!-- Loading Overlay -->
+          <div class="loading-overlay" id="weather-loading" style="display:none;">
+            <div class="loading-spinner"></div>
+          </div>
+
+          <!-- Error State -->
+          <div class="error-state" id="weather-error" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <h3>Unable to Load Weather</h3>
+            <p>Something went wrong while fetching weather data.</p>
+            <button class="retry-btn" onclick="App.loadWeather(26.9124, 75.7873, 'Jaipur', 'India', 'Rajasthan')">Try Again</button>
+          </div>
+
+          <!-- Current Weather -->
+          <div class="current-weather">
+            <div class="weather-header">
+              <div class="weather-location-group">
+                <h2 id="weather-location">Jaipur, Rajasthan, India</h2>
+                <div class="weather-datetime" id="weather-datetime">Loading...</div>
+              </div>
+            </div>
+
+            <div class="weather-main">
+              <div class="weather-temp-group">
+                <div class="weather-icon-large" id="current-weather-icon">
+                  <div class="skeleton" style="width:100%;height:100%;border-radius:12px;"></div>
+                </div>
+                <div>
+                  <div class="temp-display" id="current-temp">
+                    <span class="skeleton" style="display:inline-block;width:100px;height:64px;border-radius:8px;"></span>
+                  </div>
+                  <div class="weather-condition" id="current-condition">Loading...</div>
+                  <div class="weather-feels" id="current-feels">Feels like --°</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="weather-metrics">
+              <div class="metric-card">
+                <div class="metric-icon humidity">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+                </div>
+                <div class="metric-info">
+                  <div class="metric-label">Humidity</div>
+                  <div class="metric-value" id="metric-humidity">--%</div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon wind">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg>
+                </div>
+                <div class="metric-info">
+                  <div class="metric-label">Wind</div>
+                  <div class="metric-value" id="metric-wind">-- km/h</div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon visibility">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+                <div class="metric-info">
+                  <div class="metric-label">Visibility</div>
+                  <div class="metric-value" id="metric-visibility">-- km</div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon pressure">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="metric-info">
+                  <div class="metric-label">Pressure</div>
+                  <div class="metric-value" id="metric-pressure">-- hPa</div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon sunrise">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 18a5 5 0 00-10 0"/><line x1="12" y1="9" x2="12" y2="2"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/><polyline points="8 6 12 2 16 6"/></svg>
+                </div>
+                <div class="metric-info">
+                  <div class="metric-label">Sunrise</div>
+                  <div class="metric-value" id="metric-sunrise">--:--</div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon sunset">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 18a5 5 0 00-10 0"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/><polyline points="16 6 12 10 8 6"/></svg>
+                </div>
+                <div class="metric-info">
+                  <div class="metric-label">Sunset</div>
+                  <div class="metric-value" id="metric-sunset">--:--</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rain Probability: Today & Tomorrow Prediction Cards -->
+          <div class="rain-probability-section" id="rain-probability-section">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title">Rain Probability</h3>
+                <p class="section-subtitle">Predictive precipitation assessment for today & tomorrow</p>
+              </div>
+            </div>
+            <div class="rain-cards-grid" id="rain-cards-grid">
+              <!-- Today Card -->
+              <div class="rain-card" id="rain-card-today">
+                <div class="rain-card-header">
+                  <div class="rain-card-title-group">
+                    <span class="rain-day-badge today">Today</span>
+                    <span class="rain-card-date" id="today-date">--</span>
+                  </div>
+                  <div class="rain-card-weather-badge" id="today-condition-badge">
+                    <span class="rain-card-icon" id="today-icon"></span>
+                    <span class="rain-card-condition" id="today-condition">Loading...</span>
+                  </div>
+                </div>
+
+                <div class="rain-card-body">
+                  <div class="rain-probability-display">
+                    <div class="rain-percentage-group">
+                      <div class="rain-percentage-number" id="today-rain-prob">0<span class="rain-pct-symbol">%</span></div>
+                      <span class="rain-tier-badge" id="today-tier-badge">Calculating...</span>
+                    </div>
+                    <div class="rain-precip-stat">
+                      <svg class="rain-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
+                      </svg>
+                      <div class="rain-stat-text">
+                        <span class="rain-stat-label">Expected Precip</span>
+                        <span class="rain-stat-val" id="today-precip">0.0 mm</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Visual horizontal progress indicator -->
+                  <div class="rain-progress-wrapper">
+                    <div class="rain-progress-track">
+                      <div class="rain-progress-bar" id="today-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="rain-progress-labels">
+                      <span>0%</span>
+                      <span>50%</span>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tomorrow Card -->
+              <div class="rain-card" id="rain-card-tomorrow">
+                <div class="rain-card-header">
+                  <div class="rain-card-title-group">
+                    <span class="rain-day-badge tomorrow">Tomorrow</span>
+                    <span class="rain-card-date" id="tomorrow-date">--</span>
+                  </div>
+                  <div class="rain-card-weather-badge" id="tomorrow-condition-badge">
+                    <span class="rain-card-icon" id="tomorrow-icon"></span>
+                    <span class="rain-card-condition" id="tomorrow-condition">Loading...</span>
+                  </div>
+                </div>
+
+                <div class="rain-card-body">
+                  <div class="rain-probability-display">
+                    <div class="rain-percentage-group">
+                      <div class="rain-percentage-number" id="tomorrow-rain-prob">0<span class="rain-pct-symbol">%</span></div>
+                      <span class="rain-tier-badge" id="tomorrow-tier-badge">Calculating...</span>
+                    </div>
+                    <div class="rain-precip-stat">
+                      <svg class="rain-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
+                      </svg>
+                      <div class="rain-stat-text">
+                        <span class="rain-stat-label">Expected Precip</span>
+                        <span class="rain-stat-val" id="tomorrow-precip">0.0 mm</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Visual horizontal progress indicator -->
+                  <div class="rain-progress-wrapper">
+                    <div class="rain-progress-track">
+                      <div class="rain-progress-bar" id="tomorrow-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="rain-progress-labels">
+                      <span>0%</span>
+                      <span>50%</span>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Next 24 Hours Forecast -->
+          <div class="hourly-forecast-section" id="hourly-forecast-section">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title">Next 24 Hours</h3>
+                <p class="section-subtitle">Hourly weather outlook for your location.</p>
+              </div>
+              <div class="hourly-nav-controls">
+                <button class="hourly-nav-btn" id="hourly-scroll-left" aria-label="Scroll hourly forecast left">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <button class="hourly-nav-btn" id="hourly-scroll-right" aria-label="Scroll hourly forecast right">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="hourly-forecast-track" id="hourly-forecast-track" role="region" aria-label="Next 24 Hours Hourly Forecast">
+              <!-- Rendered dynamically by App.updateHourlyForecast -->
+            </div>
+          </div>
+
+          <!-- 7-Day Forecast -->
+          <div class="forecast-section">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title">7-Day Forecast</h3>
+                <p class="section-subtitle">Daily weather outlook</p>
+              </div>
+            </div>
+            <div class="forecast-strip" id="forecast-strip">
+              <!-- Skeleton cards -->
+              <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
+              <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
+              <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
+              <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
+              <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
+              <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
+              <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
+            </div>
+          </div>
+
+          <!-- Insights Section: Map + Saved Locations -->
+          <div class="insights-section">
+            <div class="insights-grid">
+              <!-- Map -->
+              <div class="map-card">
+                <div class="section-header">
+                  <div>
+                    <h3 class="section-title">Regional Map</h3>
+                    <p class="section-subtitle">OpenStreetMap view</p>
+                  </div>
+                </div>
+                <div class="map-wrapper">
+                  <div id="weather-map"></div>
+                </div>
+              </div>
+
+              <!-- Saved Locations Sidebar -->
+              <div class="locations-card">
+                <div class="section-header">
+                  <h3 class="section-title">Other Cities</h3>
+                  <button class="add-location-btn" id="sidebar-add-location" aria-label="Add city">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add
+                  </button>
+                </div>
+                <div class="locations-list" id="saved-locations-list">
+                  <div class="locations-empty pulse">
+                    <p>Loading saved locations...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========== ML PREDICTION LAB PAGE ========== -->
+      <section class="page-section" id="page-ml-lab" aria-label="ML Prediction Lab">
+        <div class="ml-lab-content">
+          <div class="ml-lab-header">
+            <div class="ml-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              ML Prediction Lab
+            </div>
+            <h2>Rain Prediction Engine</h2>
+            <p>Enter weather parameters to predict rain probability using our machine learning model trained on Indian meteorological data.</p>
+          </div>
+
+          <!-- Backend Status Banner -->
+          <div class="ml-status-banner checking" id="ml-status-banner" role="status" aria-live="polite">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span>Checking connection to the saved RainSense Logistic Regression model...</span>
+          </div>
+
+          <div class="ml-grid">
+            <!-- Input Form -->
+            <div class="ml-form-card">
+              <h3>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Weather Parameters
+              </h3>
+
+              <div class="ml-input-grid">
+                <div class="ml-field">
+                  <label for="ml-avg-temp">Avg Temperature (°C) *</label>
+                  <input type="number" id="ml-avg-temp" step="0.1" placeholder="e.g. 28.5" />
+                  <span class="field-error">Required</span>
+                </div>
+                <div class="ml-field">
+                  <label for="ml-min-temp">Min Temperature (°C) *</label>
+                  <input type="number" id="ml-min-temp" step="0.1" placeholder="e.g. 22.0" />
+                  <span class="field-error">Required</span>
+                </div>
+                <div class="ml-field">
+                  <label for="ml-max-temp">Max Temperature (°C) *</label>
+                  <input type="number" id="ml-max-temp" step="0.1" placeholder="e.g. 35.0" />
+                  <span class="field-error">Required</span>
+                </div>
+                <div class="ml-field">
+                  <label for="ml-wind-speed">Wind Speed (km/h) *</label>
+                  <input type="number" id="ml-wind-speed" step="0.1" placeholder="e.g. 12.5" />
+                  <span class="field-error">Required</span>
+                </div>
+                <div class="ml-field">
+                  <label for="ml-pressure">Air Pressure (hPa) *</label>
+                  <input type="number" id="ml-pressure" step="0.1" placeholder="e.g. 1013.0" />
+                  <span class="field-error">Required</span>
+                </div>
+                <div class="ml-field">
+                  <label for="ml-elevation">Elevation (m)</label>
+                  <input type="number" id="ml-elevation" step="1" placeholder="e.g. 431" />
+                </div>
+                <div class="ml-field">
+                  <label for="ml-latitude">Latitude</label>
+                  <input type="number" id="ml-latitude" step="0.001" placeholder="e.g. 26.912" />
+                </div>
+                <div class="ml-field">
+                  <label for="ml-longitude">Longitude</label>
+                  <input type="number" id="ml-longitude" step="0.001" placeholder="e.g. 75.787" />
+                </div>
+                <div class="ml-field">
+                  <label for="ml-month">Month</label>
+                  <select id="ml-month"></select>
+                </div>
+                <div class="ml-field">
+                  <label for="ml-year">Year *</label>
+                  <input type="number" id="ml-year" min="1900" max="2100" step="1" placeholder="e.g. 2026" />
+                  <span class="field-error">Required</span>
+                </div>
+                <div class="ml-field">
+                  <label for="ml-season">Season</label>
+                  <select id="ml-season"></select>
+                </div>
+                <div class="ml-field">
+                  <label for="ml-state">State</label>
+                  <select id="ml-state"></select>
+                </div>
+                <div class="ml-field">
+                  <label for="ml-district">District</label>
+                  <input type="text" id="ml-district" list="ml-district-options" placeholder="Choose or type district" autocomplete="off" /><datalist id="ml-district-options"></datalist>
+                </div>
+                <div class="ml-field full-width">
+                  <label for="ml-station">Weather Station</label>
+                  <input type="text" id="ml-station" list="ml-station-options" placeholder="Choose or type weather station" autocomplete="off" /><datalist id="ml-station-options"></datalist>
+                </div>
+              </div>
+
+              <button class="ml-autofill-btn" id="ml-autofill-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                Auto-fill from Current Weather
+              </button>
+
+              <button class="predict-btn ripple" id="predict-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                Predict Rain
+              </button>
+            </div>
+
+            <!-- Result Panel -->
+            <div class="ml-result-card">
+              <h3>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Prediction Result
+              </h3>
+
+              <!-- Placeholder -->
+              <div class="ml-result-placeholder" id="ml-result-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                <h4>No Prediction Yet</h4>
+                <p>Fill in the weather parameters and click "Predict Rain" to get a prediction.</p>
+              </div>
+
+              <!-- Result Content -->
+              <div class="ml-result-content" id="ml-result-content">
+                <!-- Probability Circle -->
+                <div class="ml-probability-display">
+                  <div class="probability-circle">
+                    <svg viewBox="0 0 128 128">
+                      <circle class="track" cx="64" cy="64" r="56" />
+                      <circle class="progress" id="probability-progress" cx="64" cy="64" r="56" />
+                    </svg>
+                    <div class="probability-value" id="probability-value">0%</div>
+                  </div>
+                  <div class="ml-prediction-label" id="ml-prediction-label">Awaiting Prediction</div>
+                </div>
+
+                <!-- Input Summary -->
+                <div class="ml-input-summary">
+                  <h4>Input Summary</h4>
+                  <div class="ml-summary-grid" id="ml-summary-grid"></div>
+                </div>
+
+                <!-- Explanation -->
+                <div class="ml-explanation">
+                  <h4>Analysis</h4>
+                  <p id="ml-explanation-text">Prediction explanation will appear here.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== SAVED LOCATIONS PAGE ========== -->
+      <section class="page-section" id="page-saved" aria-label="Saved Locations">
+        <div class="saved-page-content">
+          <div class="saved-page-header">
+            <h2>Saved Locations</h2>
+          </div>
+
+          <div class="add-city-form">
+            <input type="text" id="add-city-input" placeholder="Add a city (e.g. Tokyo, Paris, Sydney...)" aria-label="Add city" />
+            <button class="add-city-btn ripple" id="add-city-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display:inline;vertical-align:middle;margin-right:4px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add City
+            </button>
+          </div>
+
+          <div class="saved-locations-grid" id="saved-locations-grid">
+            <div class="locations-empty" style="grid-column:1/-1;">
+              <p>Loading saved locations...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== ABOUT PAGE ========== -->
+      <section class="page-section" id="page-about" aria-label="About RainSense">
+        <div class="about-content">
+          <div class="about-hero">
+            <h2>About RainSense</h2>
+            <p class="tagline">Smarter Forecasts. Safer Tomorrows.</p>
+            <p>RainSense is a premium weather intelligence platform that combines real-time meteorological data with machine learning to deliver accurate, actionable weather insights. Our mission is to empower communities, farmers, and businesses with predictive weather analysis.</p>
+          </div>
+
+          <div class="about-grid">
+            <div class="about-card">
+              <div class="about-card-icon teal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+              </div>
+              <h3>Weather Intelligence</h3>
+              <p>Real-time weather data from global meteorological services. Current conditions, hourly forecasts, and 7-day predictions powered by the Open-Meteo API with enterprise-grade reliability.</p>
+            </div>
+
+            <div class="about-card">
+              <div class="about-card-icon blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              <h3>Rain Forecasting</h3>
+              <p>Advanced precipitation analysis using probability models and historical patterns. Track rain chances across your saved locations with detailed daily and hourly breakdowns.</p>
+            </div>
+
+            <div class="about-card">
+              <div class="about-card-icon amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              </div>
+              <h3>ML Prediction Lab</h3>
+              <p>Our Prediction Lab integrates a scikit-learn Logistic Regression model trained on Indian meteorological station data. Input weather parameters and get ML-powered rain predictions.</p>
+            </div>
+
+            <div class="about-card">
+              <div class="about-card-icon purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              </div>
+              <h3>Interactive Dashboard</h3>
+              <p>A beautifully designed dashboard with regional maps, saved location management, interactive charts, and responsive design optimized for every device from mobile to ultrawide.</p>
+            </div>
+          </div>
+
+          <div class="about-sources">
+            <h3>Data Sources</h3>
+            <div class="source-list">
+              <div class="source-item">
+                <div class="source-dot"></div>
+                <div>
+                  <div class="source-name">Open-Meteo API</div>
+                  <div class="source-desc">Free, open-source weather API providing global weather forecasts. No API key required. Data sourced from national weather services worldwide.</div>
+                </div>
+              </div>
+              <div class="source-item">
+                <div class="source-dot"></div>
+                <div>
+                  <div class="source-name">OpenStreetMap</div>
+                  <div class="source-desc">Open-source geographic data powering our regional weather maps via Leaflet.js.</div>
+                </div>
+              </div>
+              <div class="source-item">
+                <div class="source-dot"></div>
+                <div>
+                  <div class="source-name">Indian Meteorological Department (IMD)</div>
+                  <div class="source-desc">Historical weather station data used to train the ML rain prediction model. Covers stations across Indian states.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-contact">
+            <h3>Project Information</h3>
+            <p>RainSense is an open-source weather intelligence project built with HTML5, CSS3, and Vanilla JavaScript. No frameworks, no build tools — just clean, modern web development.</p>
+            <div class="about-contact-links">
+              <a href="#" class="about-contact-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+                GitHub Repository
+              </a>
+              <a href="#" class="about-contact-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Contact
+              </a>
+              <a href="#" class="about-contact-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                Website
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==================== BOTTOM NAVIGATION (Mobile) ==================== -->
+  <nav class="bottom-nav" role="navigation" aria-label="Mobile navigation">
+    <div class="bottom-nav-inner">
+      <a href="#" class="bottom-nav-link active" data-page="forecast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+        Weather
+      </a>
+      <a href="#" class="bottom-nav-link" data-page="ml-lab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        ML Lab
+      </a>
+      <a href="#" class="bottom-nav-link" data-page="saved">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Saved
+      </a>
+      <a href="#" class="bottom-nav-link" data-page="about">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        About
+      </a>
+    </div>
+  </nav>
+
+  <!-- ==================== MODALS ==================== -->
+  <!-- Add Location Modal -->
+  <div class="modal-overlay" id="add-location-modal" role="dialog" aria-modal="true" aria-label="Add Location">
+    <div class="modal">
+      <h3>Add Location</h3>
+      <input type="text" class="modal-search-input" placeholder="Search for a city..." aria-label="Search city to add" />
+      <div class="modal-results"></div>
+      <div class="modal-actions">
+        <button class="modal-cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST CONTAINER ==================== -->
+  <div class="toast-container" id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- App Scripts (order matters) -->
+  <script src="js/api.js"></script>
+  <script src="js/weather.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/geolocation.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/savedLocations.js"></script>
+  <script src="js/mlLab.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

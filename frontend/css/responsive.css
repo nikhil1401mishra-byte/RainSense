@@ -1,0 +1,377 @@
+/* ============================================
+   RainSense — Responsive Breakpoints
+   ============================================ */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .header-location {
+    display: none;
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ml-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .map-wrapper {
+    height: 320px;
+  }
+
+  .bottom-nav {
+    display: block;
+  }
+
+  .main-content {
+    padding-bottom: calc(var(--space-3xl) + var(--bottom-nav-height));
+  }
+}
+
+/* Small Tablet / Large Phone (768px) */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 56px;
+  }
+
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  .current-weather {
+    padding: var(--space-xl);
+  }
+
+  .weather-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-lg);
+  }
+
+  .weather-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .forecast-card {
+    min-width: 115px;
+    padding: var(--space-md);
+  }
+
+  /* Rain Cards stack vertically on tablet / mobile */
+  .rain-cards-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .hourly-card {
+    flex: 0 0 135px;
+    min-width: 130px;
+  }
+
+  .about-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .ml-input-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ml-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .saved-locations-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+/* Phone (430px and below) */
+@media (max-width: 430px) {
+  :root {
+    --space-lg: 1rem;
+    --space-xl: 1.5rem;
+    --space-2xl: 2rem;
+  }
+
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  .brand-name {
+    font-size: var(--fs-base);
+  }
+
+  .header-right {
+    gap: var(--space-sm);
+  }
+
+  /* Search */
+  .search-bar {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .search-input-wrapper {
+    min-width: 100%;
+  }
+
+  .locate-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Current Weather */
+  .current-weather {
+    padding: var(--space-lg);
+  }
+
+  .current-weather::before {
+    width: 200px;
+    height: 200px;
+  }
+
+  .weather-header {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .weather-temp-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .weather-icon-large {
+    width: 72px;
+    height: 72px;
+  }
+
+  .weather-metrics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .metric-card {
+    padding: var(--space-sm) var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .metric-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .metric-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .metric-value {
+    font-size: var(--fs-sm);
+  }
+
+  /* Forecast */
+  .forecast-card {
+    min-width: 105px;
+    padding: var(--space-md);
+  }
+
+  .forecast-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Rain Probability & Hourly Mobile */
+  .rain-card {
+    padding: var(--space-lg);
+  }
+
+  .rain-probability-display {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .rain-precip-stat {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .hourly-forecast-track {
+    gap: var(--space-sm);
+  }
+
+  .hourly-card {
+    flex: 0 0 108px;
+    min-width: 104px;
+    min-height: 165px;
+    padding: var(--space-sm) var(--space-xs);
+    justify-content: space-between;
+  }
+
+  .hourly-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hourly-temp {
+    font-size: var(--fs-md);
+  }
+
+  /* Map */
+  .map-wrapper {
+    height: 280px;
+  }
+
+  /* ML Lab */
+  .ml-lab-content {
+    padding: 0;
+  }
+
+  .ml-form-card,
+  .ml-result-card {
+    padding: var(--space-lg);
+  }
+
+  .predict-btn {
+    height: 48px;
+  }
+
+  /* About */
+  .about-hero {
+    padding: var(--space-xl) 0;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Saved */
+  .saved-locations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .add-city-form {
+    flex-direction: column;
+  }
+
+  .add-city-btn {
+    width: 100%;
+  }
+
+  /* Toast */
+  .toast-container {
+    left: var(--space-md);
+    right: var(--space-md);
+  }
+
+  .toast {
+    max-width: 100%;
+  }
+}
+
+/* Small Phone (360px) */
+@media (max-width: 375px) {
+  .container {
+    padding: 0 var(--space-sm);
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .weather-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metric-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+    padding: var(--space-sm);
+  }
+
+  .forecast-card {
+    min-width: 95px;
+  }
+}
+
+/* Wide Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .container {
+    padding: 0 var(--space-2xl);
+  }
+
+  .insights-grid {
+    grid-template-columns: 1.4fr 0.6fr;
+  }
+
+  .map-wrapper {
+    height: 450px;
+  }
+}
+
+/* Ultra-wide (1920px+) */
+@media (min-width: 1920px) {
+  :root {
+    --max-width: 1600px;
+  }
+}
+
+/* Print */
+@media print {
+  .header,
+  .bottom-nav,
+  .search-section,
+  .toast-container {
+    display: none !important;
+  }
+
+  .main-content {
+    padding-top: 0;
+  }
+
+  .page-section {
+    display: block !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+}
+
+/* Landscape phone */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header {
+    height: 48px;
+  }
+
+  .bottom-nav {
+    height: 48px;
+  }
+
+  .current-weather {
+    padding: var(--space-md);
+  }
+
+  .weather-main {
+    flex-direction: row;
+    align-items: center;
+  }
+}
