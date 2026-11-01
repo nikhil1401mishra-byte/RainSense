@@ -197,6 +197,126 @@
             </div>
           </div>
 
+          <!-- Rain Probability: Today & Tomorrow Prediction Cards -->
+          <div class="rain-probability-section" id="rain-probability-section">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title">Rain Probability</h3>
+                <p class="section-subtitle">Predictive precipitation assessment for today & tomorrow</p>
+              </div>
+            </div>
+            <div class="rain-cards-grid" id="rain-cards-grid">
+              <!-- Today Card -->
+              <div class="rain-card" id="rain-card-today">
+                <div class="rain-card-header">
+                  <div class="rain-card-title-group">
+                    <span class="rain-day-badge today">Today</span>
+                    <span class="rain-card-date" id="today-date">--</span>
+                  </div>
+                  <div class="rain-card-weather-badge" id="today-condition-badge">
+                    <span class="rain-card-icon" id="today-icon"></span>
+                    <span class="rain-card-condition" id="today-condition">Loading...</span>
+                  </div>
+                </div>
+
+                <div class="rain-card-body">
+                  <div class="rain-probability-display">
+                    <div class="rain-percentage-group">
+                      <div class="rain-percentage-number" id="today-rain-prob">0<span class="rain-pct-symbol">%</span></div>
+                      <span class="rain-tier-badge" id="today-tier-badge">Calculating...</span>
+                    </div>
+                    <div class="rain-precip-stat">
+                      <svg class="rain-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
+                      </svg>
+                      <div class="rain-stat-text">
+                        <span class="rain-stat-label">Expected Precip</span>
+                        <span class="rain-stat-val" id="today-precip">0.0 mm</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Visual horizontal progress indicator -->
+                  <div class="rain-progress-wrapper">
+                    <div class="rain-progress-track">
+                      <div class="rain-progress-bar" id="today-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="rain-progress-labels">
+                      <span>0%</span>
+                      <span>50%</span>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tomorrow Card -->
+              <div class="rain-card" id="rain-card-tomorrow">
+                <div class="rain-card-header">
+                  <div class="rain-card-title-group">
+                    <span class="rain-day-badge tomorrow">Tomorrow</span>
+                    <span class="rain-card-date" id="tomorrow-date">--</span>
+                  </div>
+                  <div class="rain-card-weather-badge" id="tomorrow-condition-badge">
+                    <span class="rain-card-icon" id="tomorrow-icon"></span>
+                    <span class="rain-card-condition" id="tomorrow-condition">Loading...</span>
+                  </div>
+                </div>
+
+                <div class="rain-card-body">
+                  <div class="rain-probability-display">
+                    <div class="rain-percentage-group">
+                      <div class="rain-percentage-number" id="tomorrow-rain-prob">0<span class="rain-pct-symbol">%</span></div>
+                      <span class="rain-tier-badge" id="tomorrow-tier-badge">Calculating...</span>
+                    </div>
+                    <div class="rain-precip-stat">
+                      <svg class="rain-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
+                      </svg>
+                      <div class="rain-stat-text">
+                        <span class="rain-stat-label">Expected Precip</span>
+                        <span class="rain-stat-val" id="tomorrow-precip">0.0 mm</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Visual horizontal progress indicator -->
+                  <div class="rain-progress-wrapper">
+                    <div class="rain-progress-track">
+                      <div class="rain-progress-bar" id="tomorrow-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="rain-progress-labels">
+                      <span>0%</span>
+                      <span>50%</span>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Next 24 Hours Forecast -->
+          <div class="hourly-forecast-section" id="hourly-forecast-section">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title">Next 24 Hours</h3>
+                <p class="section-subtitle">Hourly weather outlook for your location.</p>
+              </div>
+              <div class="hourly-nav-controls">
+                <button class="hourly-nav-btn" id="hourly-scroll-left" aria-label="Scroll hourly forecast left">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <button class="hourly-nav-btn" id="hourly-scroll-right" aria-label="Scroll hourly forecast right">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="hourly-forecast-track" id="hourly-forecast-track" role="region" aria-label="Next 24 Hours Hourly Forecast">
+              <!-- Rendered dynamically by App.updateHourlyForecast -->
+            </div>
+          </div>
+
           <!-- 7-Day Forecast -->
           <div class="forecast-section">
             <div class="section-header">
@@ -214,22 +334,6 @@
               <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
               <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
               <div class="forecast-card skeleton shimmer" style="min-width:130px;height:200px;"></div>
-            </div>
-          </div>
-
-          <!-- Rain Probability Chart -->
-          <div class="rain-chart-section">
-            <div class="section-header">
-              <div>
-                <h3 class="section-title">Rain Probability</h3>
-                <p class="section-subtitle">Precipitation forecast for the week</p>
-              </div>
-            </div>
-            <div class="chart-container">
-              <div class="chart-canvas-wrapper">
-                <canvas id="rain-chart"></canvas>
-                <div class="chart-tooltip" id="chart-tooltip"></div>
-              </div>
             </div>
           </div>
 
