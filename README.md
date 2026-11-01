@@ -83,3 +83,39 @@ Model-specific category values are read from the fitted OneHotEncoder and popula
 - RainSense's Open-Meteo weather dashboard remains a weather forecast feature. The joblib model output is a separate ML classification estimate; it is not the same thing as Open-Meteo's forecast probability.
 - Prediction response includes the saved model threshold, class-1 rain probability, class decision, confidence band, and stored test accuracy when that metadata is available.
 - No predictions are fabricated in the browser. If the backend or model is unavailable, the UI displays the actual error and no fake result.
+
+## Deploy to Vercel (Frontend + FastAPI + Joblib model)
+
+This repository is configured for a **single Vercel deployment**. The root `app.py` exports the FastAPI app from `backend/main.py`; that app serves the HTML/CSS/JS frontend and the `/api/*` ML endpoints on the same domain. The browser uses same-origin API paths, so no separate backend URL or CORS configuration is required.
+
+### Before importing into Vercel
+
+1. Push the **contents of this project folder** to the root of your GitHub repository (so `app.py`, `requirements.txt`, `backend/`, `frontend/`, and the `.joblib` file are at repository root level).
+2. Confirm `best_rain_logistic_regression.joblib` is committed. It is a small model bundle in this project; never commit `.venv/` or `__pycache__/`.
+3. Keep `.python-version` set to `3.12`. The model dependencies are pinned, including `scikit-learn==1.6.1`.
+
+### Deploy
+
+1. Sign in to Vercel and choose **Add New → Project**.
+2. Import the RainSense GitHub repository.
+3. Set **Root Directory** to `./` if the project files are at repository root. If you committed them inside a subfolder, set Root Directory to that folder instead.
+4. Let Vercel detect the Python/FastAPI app. Do not set a custom Build Command or Output Directory; the root `app.py` and `requirements.txt` are used by the Python runtime.
+5. Deploy.
+
+### Verify after deployment
+
+Replace `YOUR_DOMAIN` with the URL assigned by Vercel:
+
+- `https://YOUR_DOMAIN/` — RainSense frontend
+- `https://YOUR_DOMAIN/api/health` — model health; expect `"model_loaded": true`
+- `https://YOUR_DOMAIN/api/model-info` — loaded model feature schema
+- `https://YOUR_DOMAIN/docs` — FastAPI interactive API documentation
+
+If `/` loads but `/api/health` reports `model_loaded: false`, open the Vercel deployment logs and check the model-loading error. The application deliberately reports a degraded model status rather than fabricating predictions.
+
+### Notes
+
+- Vercel's Python runtime is currently documented as Beta and supports Python 3.12, 3.13, and 3.14; this project pins 3.12 for a stable model dependency environment.
+- FastAPI serves `frontend/` through `StaticFiles` and serves prediction endpoints through the same-origin `/api/` routes.
+- The saved `.joblib` file is a pickle-based artifact. Only deploy a model file you trust.
+- Local development remains available using the `start.bat` / `start.sh` scripts or the Uvicorn command documented above.

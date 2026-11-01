@@ -20,21 +20,17 @@
 
 /* ---------- Card Entrance ---------- */
 .current-weather,
-.rain-probability-section,
-.hourly-forecast-section,
 .forecast-section,
+.rain-chart-section,
 .insights-section {
   animation: slide-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-.rain-probability-section { animation-delay: 0.08s; }
-.hourly-forecast-section { animation-delay: 0.14s; }
-.forecast-section { animation-delay: 0.2s; }
-.insights-section { animation-delay: 0.26s; }
+.forecast-section { animation-delay: 0.1s; }
+.rain-chart-section { animation-delay: 0.15s; }
+.insights-section { animation-delay: 0.2s; }
 
 /* ---------- Card Hover Effects ---------- */
-.rain-card,
-.hourly-card,
 .forecast-card,
 .metric-card,
 .location-item,

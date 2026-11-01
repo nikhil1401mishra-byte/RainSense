@@ -114,11 +114,9 @@ const API = (() => {
         ].join(','),
         hourly: [
           'temperature_2m',
-          'apparent_temperature',
           'precipitation_probability',
           'precipitation',
-          'weather_code',
-          'wind_speed_10m'
+          'weather_code'
         ].join(','),
         daily: [
           'temperature_2m_max',

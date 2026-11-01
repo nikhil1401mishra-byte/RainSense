@@ -31,10 +31,9 @@ const Charts = (() => {
   }
 
   /**
-   * Render rain probability chart (preserved as no-op if canvas is removed)
+   * Render rain probability chart
    */
   function renderChart(data) {
-    if (!chartCanvas) return;
     if (!chartCtx || !data) return;
     chartData = data;
 

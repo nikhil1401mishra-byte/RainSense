@@ -62,10 +62,10 @@ const Weather = (() => {
           </g>
         </svg>` : `
         <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M38 14C28 14 20 22 20 32s8 18 18 18c4 0 7.5-1.3 10.5-3.5C46 48 43 49 40 49c-9.4 0-17-7.6-17-17s7.6-17 17-17c3 0 6 1 8.5 2.5C45.5 15.3 42 14 38 14z" fill="#e2e8f0" opacity="0.95"/>
-          <circle cx="46" cy="12" r="1.5" fill="#38bdf8" opacity="0.8"/>
-          <circle cx="52" cy="20" r="1" fill="#38bdf8" opacity="0.7"/>
-          <circle cx="16" cy="16" r="1" fill="#38bdf8" opacity="0.6"/>
+          <path d="M38 14C28 14 20 22 20 32s8 18 18 18c4 0 7.5-1.3 10.5-3.5C46 48 43 49 40 49c-9.4 0-17-7.6-17-17s7.6-17 17-17c3 0 6 1 8.5 2.5C45.5 15.3 42 14 38 14z" fill="#94a3b8" opacity="0.9"/>
+          <circle cx="46" cy="12" r="1.5" fill="#94a3b8" opacity="0.5"/>
+          <circle cx="52" cy="20" r="1" fill="#94a3b8" opacity="0.4"/>
+          <circle cx="16" cy="16" r="1" fill="#94a3b8" opacity="0.3"/>
         </svg>`,
 
       'partly-cloudy': isDay ? `
@@ -229,89 +229,6 @@ const Weather = (() => {
   }
 
   /**
-   * Format full date for cards (e.g. Saturday, Oct 31, 2026)
-   */
-  function formatFullDate(dateString) {
-    try {
-      const date = new Date(dateString + 'T00:00:00');
-      return date.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      });
-    } catch {
-      return formatDate(dateString);
-    }
-  }
-
-  /**
-   * Get probability tier and color tokens
-   * 0–20%: Low probability
-   * 21–50%: Moderate probability
-   * 51–75%: High probability
-   * 76–100%: Very high probability
-   */
-  function getProbabilityTier(percent) {
-    const p = Math.max(0, Math.min(100, Math.round(Number(percent) || 0)));
-    if (p <= 20) {
-      return {
-        tier: 'low',
-        label: 'Low probability',
-        color: '#10b981',
-        bg: 'rgba(16, 185, 129, 0.14)',
-        border: 'rgba(16, 185, 129, 0.28)',
-        gradient: 'linear-gradient(90deg, #10b981, #00e6d2)',
-        glow: 'rgba(16, 185, 129, 0.25)'
-      };
-    }
-    if (p <= 50) {
-      return {
-        tier: 'moderate',
-        label: 'Moderate probability',
-        color: '#38bdf8',
-        bg: 'rgba(56, 189, 248, 0.14)',
-        border: 'rgba(56, 189, 248, 0.28)',
-        gradient: 'linear-gradient(90deg, #38bdf8, #60a5fa)',
-        glow: 'rgba(56, 189, 248, 0.25)'
-      };
-    }
-    if (p <= 75) {
-      return {
-        tier: 'high',
-        label: 'High probability',
-        color: '#f59e0b',
-        bg: 'rgba(245, 158, 11, 0.14)',
-        border: 'rgba(245, 158, 11, 0.28)',
-        gradient: 'linear-gradient(90deg, #f59e0b, #fb923c)',
-        glow: 'rgba(245, 158, 11, 0.25)'
-      };
-    }
-    return {
-      tier: 'very-high',
-      label: 'Very high probability',
-      color: '#ef4444',
-      bg: 'rgba(239, 68, 68, 0.16)',
-      border: 'rgba(239, 68, 68, 0.32)',
-      gradient: 'linear-gradient(90deg, #f97316, #ef4444)',
-      glow: 'rgba(239, 68, 68, 0.28)'
-    };
-  }
-
-  /**
-   * Format hourly time
-   */
-  function formatHourlyTime(isoString, isNow = false) {
-    if (isNow) return 'Now';
-    try {
-      const date = new Date(isoString);
-      return date.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
-    } catch {
-      return '--';
-    }
-  }
-
-  /**
    * Parse complete weather data
    */
   function parseWeatherData(data) {
@@ -324,7 +241,6 @@ const Weather = (() => {
       pressure: data.current.surface_pressure,
       weatherCode: data.current.weather_code,
       isDay: data.current.is_day,
-      time: data.current.time,
       condition: getCondition(data.current.weather_code)
     };
 
@@ -336,11 +252,10 @@ const Weather = (() => {
       date,
       dayName: getDayName(date, true),
       dateFormatted: formatDate(date),
-      fullDateFormatted: formatFullDate(date),
       tempMax: data.daily.temperature_2m_max[i],
       tempMin: data.daily.temperature_2m_min[i],
-      rainProbability: data.daily.precipitation_probability_max[i] ?? 0,
-      precipSum: data.daily.precipitation_sum[i] ?? 0,
+      rainProbability: data.daily.precipitation_probability_max[i],
+      precipSum: data.daily.precipitation_sum[i],
       sunrise: data.daily.sunrise[i],
       sunset: data.daily.sunset[i],
       weatherCode: data.daily.weather_code[i],
@@ -354,12 +269,9 @@ const Weather = (() => {
     const hourly = data.hourly.time.map((time, i) => ({
       time,
       temp: data.hourly.temperature_2m[i],
-      feelsLike: data.hourly.apparent_temperature ? data.hourly.apparent_temperature[i] : null,
-      rainProbability: data.hourly.precipitation_probability ? (data.hourly.precipitation_probability[i] ?? 0) : 0,
-      precipitation: data.hourly.precipitation ? (data.hourly.precipitation[i] ?? 0) : 0,
-      weatherCode: data.hourly.weather_code[i],
-      windSpeed: data.hourly.wind_speed_10m ? data.hourly.wind_speed_10m[i] : null,
-      condition: getCondition(data.hourly.weather_code[i])
+      rainProbability: data.hourly.precipitation_probability[i],
+      precipitation: data.hourly.precipitation[i],
+      weatherCode: data.hourly.weather_code[i]
     }));
 
     return { current, daily, hourly, timezone: data.timezone };
@@ -372,9 +284,6 @@ const Weather = (() => {
     formatTemp,
     formatTime,
     formatDate,
-    formatFullDate,
-    formatHourlyTime,
-    getProbabilityTier,
     getDayName,
     getWindDirection,
     parseWeatherData,

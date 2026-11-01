@@ -881,440 +881,47 @@ img, svg {
   height: 12px;
 }
 
-/* ---------- Rain Probability: Today & Tomorrow Prediction Cards ---------- */
-.rain-probability-section {
+/* ---------- Rain Chart ---------- */
+.rain-chart-section {
   margin-bottom: var(--space-2xl);
 }
 
-.rain-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-xl);
-}
-
-.rain-card {
-  background: linear-gradient(145deg, #10192a, #0b111e);
-  border: 1px solid rgba(56, 189, 248, 0.22);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  box-shadow: 0 10px 32px -4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: all var(--transition-base);
-  position: relative;
-  overflow: hidden;
-}
-
-.rain-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.4), transparent);
-  opacity: 0.6;
-}
-
-.rain-card:hover {
-  border-color: rgba(0, 230, 210, 0.38);
-  transform: translateY(-3px);
-  box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.55), 0 0 24px rgba(0, 230, 210, 0.12);
-}
-
-.rain-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--space-lg);
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-}
-
-.rain-card-title-group {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-}
-
-.rain-day-badge {
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.rain-day-badge.today {
-  background: rgba(0, 230, 210, 0.16);
-  color: var(--accent-primary);
-  border: 1px solid rgba(0, 230, 210, 0.32);
-}
-
-.rain-day-badge.tomorrow {
-  background: rgba(56, 189, 248, 0.16);
-  color: var(--accent-secondary);
-  border: 1px solid rgba(56, 189, 248, 0.32);
-}
-
-.rain-card-date {
-  font-size: var(--fs-sm);
-  color: var(--text-secondary);
-  font-weight: var(--fw-medium);
-}
-
-.rain-card-weather-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.rain-card-icon {
-  width: 24px;
-  height: 24px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.rain-card-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.rain-card-condition {
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
-  color: var(--text-primary);
-}
-
-.rain-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
-
-.rain-probability-display {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--space-md);
-}
-
-.rain-percentage-group {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-md);
-  flex-wrap: wrap;
-}
-
-.rain-percentage-number {
-  font-size: clamp(2.75rem, 3.8vw, 3.75rem);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  font-family: var(--font-primary);
-  color: var(--text-primary);
-  display: inline-flex;
-  align-items: baseline;
-}
-
-.rain-pct-symbol {
-  font-size: clamp(1.5rem, 2vw, 2rem);
-  font-weight: 600;
-  margin-left: 2px;
-  opacity: 0.85;
-}
-
-.rain-tier-badge {
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  text-transform: capitalize;
-  border: 1px solid transparent;
-  letter-spacing: 0.02em;
-}
-
-.rain-precip-stat {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  background: rgba(15, 23, 42, 0.6);
-  padding: 8px 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(56, 189, 248, 0.15);
-}
-
-.rain-stat-icon {
-  width: 20px;
-  height: 20px;
-  color: var(--accent-rain);
-  flex-shrink: 0;
-}
-
-.rain-stat-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.rain-stat-label {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  letter-spacing: 0.05em;
-  font-weight: var(--fw-medium);
-}
-
-.rain-stat-val {
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-bold);
-  color: var(--text-primary);
-}
-
-.rain-progress-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.rain-progress-track {
-  width: 100%;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.rain-progress-bar {
-  height: 100%;
-  border-radius: var(--radius-full);
-  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease;
-  min-width: 0%;
-}
-
-.rain-progress-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  font-weight: var(--fw-medium);
-  padding: 0 2px;
-}
-
-/* Light Theme overrides for Rain Cards */
-[data-theme="light"] .rain-card {
-  background: linear-gradient(145deg, #ffffff, #f8fafc);
-  border-color: rgba(56, 189, 248, 0.28);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="light"] .rain-card-weather-badge {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="light"] .rain-precip-stat {
-  background: rgba(241, 245, 249, 0.9);
-  border-color: rgba(56, 189, 248, 0.2);
-}
-
-[data-theme="light"] .rain-progress-track {
-  background: rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 0, 0, 0.05);
-}
-
-/* ---------- Next 24 Hours Forecast Section ---------- */
-.hourly-forecast-section {
-  margin-bottom: var(--space-2xl);
-}
-
-.hourly-nav-controls {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-}
-
-.hourly-nav-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-full);
+.chart-container {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.hourly-nav-btn:hover:not(:disabled) {
-  background: var(--bg-card-hover);
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
-  transform: scale(1.05);
-}
-
-.hourly-nav-btn:disabled,
-.hourly-nav-btn.disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.hourly-nav-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-.hourly-forecast-track {
-  display: flex;
-  gap: var(--space-md);
-  overflow-x: auto;
-  padding: 4px 2px var(--space-sm);
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-color) transparent;
-}
-
-.hourly-forecast-track::-webkit-scrollbar {
-  height: 6px;
-}
-
-.hourly-forecast-track::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.hourly-forecast-track::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: var(--radius-full);
-}
-
-.hourly-card {
-  flex: 0 0 155px;
-  min-width: 145px;
-  min-height: 185px;
-  padding: var(--space-md) var(--space-xs);
-  background: rgba(20, 28, 45, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(56, 189, 248, 0.12);
   border-radius: var(--radius-lg);
-  text-align: center;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  padding: var(--space-xl);
   position: relative;
 }
 
-.hourly-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  background: rgba(26, 37, 60, 0.85);
-}
-
-.hourly-card.current-hour {
-  border-color: var(--accent-primary);
-  background: linear-gradient(180deg, rgba(0, 230, 210, 0.14), rgba(18, 26, 42, 0.9));
-  box-shadow: 0 0 20px rgba(0, 230, 210, 0.22), inset 0 0 12px rgba(0, 230, 210, 0.06);
-}
-
-.hourly-time-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+.chart-canvas-wrapper {
+  position: relative;
   width: 100%;
+  height: 260px;
 }
 
-.hourly-time {
+.chart-canvas-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-tooltip {
+  position: absolute;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
   font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
-  color: var(--text-secondary);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
 }
 
-.hourly-card.current-hour .hourly-time {
-  color: var(--accent-primary);
-  font-weight: var(--fw-bold);
-}
-
-.hourly-now-badge {
-  font-size: 9px;
-  font-weight: 800;
-  background: var(--gradient-accent);
-  color: #0a0e17;
-  padding: 2px 6px;
-  border-radius: var(--radius-full);
-  letter-spacing: 0.05em;
-}
-
-.hourly-icon {
-  width: 40px;
-  height: 40px;
-  margin: 2px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hourly-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.hourly-temp {
-  font-size: var(--fs-lg);
-  font-weight: var(--fw-bold);
-  color: var(--text-primary);
-}
-
-.hourly-rain {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
-}
-
-.hourly-rain svg {
-  width: 12px;
-  height: 12px;
-}
-
-.hourly-precip {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  font-weight: var(--fw-medium);
-}
-
-/* Light Theme overrides for Hourly */
-[data-theme="light"] .hourly-card {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .hourly-card:hover {
-  background: #ffffff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .hourly-card.current-hour {
-  background: linear-gradient(180deg, rgba(0, 230, 210, 0.16), rgba(255, 255, 255, 0.95));
-  border-color: var(--accent-primary);
+.chart-tooltip.visible {
+  opacity: 1;
 }
 
 /* ---------- Insights Grid ---------- */
